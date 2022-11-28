@@ -25,13 +25,13 @@ async function getHotels(userId: number): Promise<Hotel[]> {
   return hotels;
 }
 
-async function getRoomsByHotelId(userId: number, hotelId: number): Promise<Room[]> {
+async function getRoomsByHotelId(userId: number, hotelId: number): Promise<Hotel & { Rooms: Room[] }> {
   await verifyPermissionUser(userId);
 
   const hotel = await hotelsRepository.findUniqueHotelById(hotelId);
   if (!hotel) throw notFoundError();
 
-  const rooms = await hotelsRepository.findManyRoomsByHotelId(hotelId);
+  const rooms = await hotelsRepository.findUniqueRoomsByHotelId(hotelId);
 
   return rooms;
 }

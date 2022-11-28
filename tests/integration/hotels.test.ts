@@ -196,7 +196,14 @@ describe("GET /hotels/:hotelId", () => {
 
       const response = await server.get(`/hotels/${hotel.id}`).set("Authorization", `Bearer ${token}`);
 
-      expect(response.body).toEqual([]);
+      expect(response.body).toEqual({
+        id: hotel.id,
+        name: hotel.name,
+        image: hotel.image,
+        Rooms: [],
+        createdAt: hotel.createdAt.toISOString(),
+        updatedAt: hotel.updatedAt.toISOString(),
+      });
     });
 
     it("should respond with status 200 and with existing Hotel Rooms data", async () => {
@@ -211,23 +218,23 @@ describe("GET /hotels/:hotelId", () => {
       const response = await server.get(`/hotels/${hotel.id}`).set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toBe(httpStatus.OK);
-      expect(response.body).toEqual([
-        {
-          id: room.id,
-          name: room.name,
-          capacity: room.capacity,
-          hotelId: room.hotelId,
-          Hotel: {
-            id: hotel.id,
-            name: hotel.name,
-            image: hotel.image,
-            createdAt: hotel.createdAt.toISOString(),
-            updatedAt: hotel.updatedAt.toISOString(),
+      expect(response.body).toEqual({
+        id: hotel.id,
+        name: hotel.name,
+        image: hotel.image,
+        Rooms: [
+          {
+            id: room.id,
+            name: room.name,
+            capacity: room.capacity,
+            hotelId: room.hotelId,
+            createdAt: room.createdAt.toISOString(),
+            updatedAt: room.updatedAt.toISOString(),
           },
-          createdAt: room.createdAt.toISOString(),
-          updatedAt: room.updatedAt.toISOString(),
-        },
-      ]);
+        ],
+        createdAt: hotel.createdAt.toISOString(),
+        updatedAt: hotel.updatedAt.toISOString(),
+      });
     });
   });
 });
